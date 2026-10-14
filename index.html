@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BL tech — Biomedical Polymer</title>
+    <meta name="description" content="비엘테크(BL tech)는 특허 폴리머 합성 기술로 정형외과용 캐스트·스플린트, 하이드로겔 피부보호대, 산업용 배관보수테이프를 개발·제조하는 기업입니다." />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/png" href="/brand/symbol-64.png" />
+    <link rel="apple-touch-icon" href="/brand/symbol-180.png" />
+    <noscript><style>.preloader { display: none; }</style></noscript>
+  </head>
+  <body>
+    <svg class="sprite" aria-hidden="true">
+      <symbol id="i-tick" viewBox="0 0 24 24"><path d="M5 6v12M5 12h14" /></symbol>
+      <symbol id="i-corner" viewBox="0 0 24 24"><path d="M3 12h16M19 4v16" /></symbol>
+      <symbol id="i-molecule" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" /><circle cx="8.5" cy="8.5" r="2" /><circle cx="15.5" cy="8.5" r="2" /><circle cx="12" cy="15.5" r="2" /><path d="M10.5 8.5h3M9.5 10.3l1.5 3.4M14.5 10.3 13 13.7" /></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12" /></symbol>
+      <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 5c3 3.6 5 6.3 5 8.8a5 5 0 0 1-10 0C7 11.3 9 8.6 12 5z" /></symbol>
+      <symbol id="i-pipe" viewBox="0 0 24 24"><path d="M4 8h8.5A4.5 4.5 0 0 1 17 12.5V20M4 13h7.5a.5.5 0 0 1 .5.5V20M9 6v9M14.6 16H19.4" /></symbol>
+      <symbol id="i-factory" viewBox="0 0 24 24"><path d="M4 19V11l4.5 2.8V11l4.5 2.8V6h5v13zM8 16.5h2M12 16.5h2" /></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M8 16 16 8M9.5 8H16v6.5" /></symbol>
+      <symbol id="i-hex" viewBox="0 0 24 24"><path d="M12 5l6 3.5v7L12 19l-6-3.5v-7z" /><circle cx="12" cy="12" r="1.6" /></symbol>
+      <symbol id="i-next" viewBox="0 0 24 24"><path d="M7 6l8 6-8 6zM17 6v12" /></symbol>
+    </svg>
+
+    <div class="preloader" aria-hidden="true">
+      <p class="preloader__count"><svg class="icon"><use href="#i-tick" /></svg><span data-count>000</span></p>
+    </div>
+    <div class="bg-layer" aria-hidden="true"></div>
+    <div class="cursor" aria-hidden="true"></div>
+
+    <!-- Mobile header + menu -->
+    <header class="m-header">
+      <a class="m-header__logo" href="#top"><img src="/brand/logo.png" alt="BL tech" /></a>
+      <div class="m-header__actions">
+        <button class="btn-circle" type="button" data-contact-open aria-label="문의하기">B</button>
+        <button class="btn-square" type="button" data-menu-toggle aria-controls="m-menu" aria-expanded="false" aria-label="메뉴">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+    <nav class="m-menu" id="m-menu" aria-label="모바일 메뉴">
+      <ul class="m-menu__list">
+        <li><a href="#business"><span>01</span>Business</a></li>
+        <li><a href="#company"><span>02</span>Company</a></li>
+        <li><a href="#contact"><span>03</span>Contact</a></li>
+        <li><a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3" target="_blank" rel="noopener"><span>04</span>Catalog</a></li>
+      </ul>
+      <p class="m-menu__foot"><a href="tel:033-264-2686">TEL 033-264-2686</a></p>
+    </nav>
+
+    <!-- Desktop fixed UI -->
+    <nav class="pills" aria-label="주요 메뉴">
+      <a href="#business" data-nav="business">Business</a>
+      <a href="#company" data-nav="company">Company</a>
+      <a href="#contact" data-nav="contact">Contact</a>
+      <a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3" target="_blank" rel="noopener">Catalog</a>
+    </nav>
+    <button class="cta" type="button" data-contact-open>
+      <svg class="icon"><use href="#i-corner" /></svg>
+      <span>파트너 문의하기</span>
+    </button>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="sidebar__inner">
+          <a class="sidebar__logo" href="#top"><img src="/brand/logo.png" alt="BL tech" /></a>
+          <div class="sidebar__symbol"><img src="/images/brand-symbol-line.webp" alt="" /></div>
+          <nav class="index" aria-label="사업 분야">
+            <p class="index__head"><svg class="icon"><use href="#i-tick" /></svg>Business</p>
+            <a class="index__item" href="#biz-01"><span>01</span>정형외과 의료기기<i></i></a>
+            <a class="index__item" href="#biz-02"><span>02</span>더마 케어<i></i></a>
+            <a class="index__item" href="#biz-03"><span>03</span>산업용 보수재<i></i></a>
+            <a class="index__item" href="#biz-04"><span>04</span>플랜트<i></i></a>
+          </nav>
+          <div class="sidebar__art"><img src="/images/contact-platform-line.webp" alt="" /></div>
+        </div>
+      </aside>
+
+      <main class="main" id="top">
+        <!-- Hero -->
+        <section class="hero">
+          <p class="hero__label"><svg class="icon"><use href="#i-molecule" /></svg>Vision</p>
+          <h1 class="display hero__title" data-lines>글로벌 경쟁력을 갖춘 기술 혁신과 윤리를 바탕으로, 고객, 직원, 주주와 함께 성장하며 지속가능한 가치를 창출하는 회사</h1>
+          <div class="hero__symbol"><img src="/images/brand-symbol-line.webp" alt="" /></div>
+          <div class="tags"><span class="tag">Polymer Tech</span><i class="tags__line"></i><span class="tag tag--round">Better Life</span></div>
+        </section>
+
+        <p class="list-head" id="business"><svg class="icon"><use href="#i-tick" /></svg>Business</p>
+
+        <!-- 01 -->
+        <section class="case" id="biz-01">
+          <header class="case__head">
+            <span class="case__num">01</span>
+            <div class="case__label">
+              <h2 class="case__title" data-lines>정형외과 <br />의료기기</h2>
+              <p class="case__meta">NEAL · SMILE<br />Cast · Splint<br />Compression Band</p>
+            </div>
+            <button class="case__more" type="button" aria-expanded="false">More</button>
+          </header>
+          <div class="case__body">
+            <div class="case__icons">
+              <span class="badge badge--square"><svg class="icon"><use href="#i-plus" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-arrow" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-hex" /></svg></span>
+            </div>
+            <div class="case__tile">NEAL</div>
+            <p class="case__desc">특허기술이 접목된 폴리머 소재로 정형외과용 캐스트, 스플린트, 압박밴드를 만듭니다. 끈적임 없는 레진과 직접 직조한 프리미엄 원단을 쓴 NEAL 캐스트는 미국, 일본, 영국, 프랑스, 호주 등 36개국 이상에 공급되고 있습니다. <a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3&amp;wr_id=3" target="_blank" rel="noopener">카탈로그 보기.</a></p>
+            <dl class="rows">
+              <div class="rows__row"><dt>공급 국가</dt><dd>36+</dd></div>
+              <div class="rows__row"><dt>NEAL 일본 시장 점유율</dt><dd>1위</dd></div>
+              <div class="rows__row"><dt>인증</dt><dd>CE MDR · FDA</dd></div>
+              <div class="rows__row"><dt>캐스트 원단</dt><dd>자체 직조</dd></div>
+            </dl>
+          </div>
+          <div class="case__media">
+            <div class="case__track">
+              <figure class="media media--dither" style="--c: 1/11; --r: 1/8; --ar: 1.5"><img src="/images/ortho-cast-dither.png" alt="캐스팅 테이프 캐스트를 착용한 다리 (디더링 이미지)" loading="lazy" /></figure>
+              <figure class="media media--bleed" style="--c: 13/25; --r: 1/14; --ar: 1"><img src="/images/ortho-rolls.webp" alt="여러 색상의 캐스팅 테이프 롤" loading="lazy" /></figure>
+              <figure class="media" style="--c: 1/8; --r: 17/26; --ar: 0.75"><img src="/images/ortho-macro.webp" alt="캐스팅 테이프 원단 클로즈업" loading="lazy" /></figure>
+              <figure class="media media--line" style="--c: 9/25; --r: 21/33; --ar: 1.4"><img src="/images/ortho-roll-line.webp" alt="캐스팅 테이프 롤 구조 라인 드로잉" loading="lazy" /></figure>
+              <figure class="media media--dither" style="--c: 1/13; --r: 37/50; --ar: 1"><img src="/images/ortho-splint-dither.png" alt="스플린트 제품 (디더링 이미지)" loading="lazy" /></figure>
+              <figure class="media media--bleed" style="--c: 16/25; --r: 45/51; --ar: 1.5"><img src="/images/ortho-cover.webp" alt="캐스트 커버를 착용하는 모습" loading="lazy" /></figure>
+            </div>
+          </div>
+        </section>
+
+        <!-- 02 -->
+        <section class="case" id="biz-02">
+          <header class="case__head">
+            <span class="case__num">02</span>
+            <div class="case__label">
+              <h2 class="case__title" data-lines>더마 케어</h2>
+              <p class="case__meta">BEODERM<br />Derma Care<br />Hydrogel Patch</p>
+            </div>
+            <button class="case__more" type="button" aria-expanded="false">More</button>
+          </header>
+          <div class="case__body">
+            <div class="case__icons">
+              <span class="badge badge--square"><svg class="icon"><use href="#i-drop" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-arrow" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-hex" /></svg></span>
+            </div>
+            <div class="case__tile">BEODERM</div>
+            <p class="case__desc">TDS(Transdermal Delivery System) 기술을 활용한 의료기기 1등급 하이드로겔 피부보호대입니다. 특허받은 고분자 하이드로겔로 민감한 피부에도 자극 없이 붙으며, 의료기기와 화장품 제조 허가를 모두 갖춰 원하는 트랙으로 개발할 수 있습니다. <a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3&amp;wr_id=9" target="_blank" rel="noopener">카탈로그 보기.</a></p>
+            <dl class="rows">
+              <div class="rows__row"><dt>의료기기 등급</dt><dd>1등급</dd></div>
+              <div class="rows__row"><dt>하이드로겔 특허</dt><dd>2건</dd></div>
+              <div class="rows__row"><dt>의료기기 인증</dt><dd>FDA · CE MDR</dd></div>
+              <div class="rows__row"><dt>화장품 인증</dt><dd>CPNP · ISO 22716</dd></div>
+              <div class="rows__row"><dt>제품 라인업</dt><dd>5종</dd></div>
+              <div class="rows__row"><dt>OEM / ODM</dt><dd>가능</dd></div>
+            </dl>
+          </div>
+          <div class="case__media">
+            <div class="case__track">
+              <figure class="media media--dither" style="--c: 1/13; --r: 1/13; --ar: 1"><img src="/images/derma-hand-dither.png" alt="손등에 부착한 하이드로겔 패치 (디더링 이미지)" loading="lazy" /></figure>
+              <figure class="media media--bleed" style="--c: 14/25; --r: 9/17; --ar: 1.5"><img src="/images/derma-peel.webp" alt="하이드로겔 시트를 떼어내는 모습" loading="lazy" /></figure>
+              <button class="media media--btn" type="button" style="--c: 9/11; --r: 22/24" data-next="#biz-03" aria-label="다음 사업 분야로 이동"><svg class="icon"><use href="#i-next" /></svg></button>
+              <figure class="media" style="--c: 1/8; --r: 27/38; --ar: 0.67"><img src="/images/derma-lab.webp" alt="하이드로겔을 트레이에 붓는 연구실 장면" loading="lazy" /></figure>
+              <figure class="media" style="--c: 9/20; --r: 32/39; --ar: 1.5"><img src="/images/derma-shapes-dark.webp" alt="다양한 형태의 하이드로겔 패치" loading="lazy" /></figure>
+              <figure class="media media--line" style="--c: 13/25; --r: 42/51; --ar: 1.35"><img src="/images/derma-layers-line.webp" alt="하이드로겔 패치 층 구조 라인 드로잉" loading="lazy" /></figure>
+            </div>
+          </div>
+        </section>
+
+        <!-- 03 -->
+        <section class="case" id="biz-03">
+          <header class="case__head">
+            <span class="case__num">03</span>
+            <div class="case__label">
+              <h2 class="case__title" data-lines>산업용 <br />보수재</h2>
+              <p class="case__meta">PRAX<br />Industrial<br />Pipe Repair Tape</p>
+            </div>
+            <button class="case__more" type="button" aria-expanded="false">More</button>
+          </header>
+          <div class="case__body">
+            <div class="case__icons">
+              <span class="badge badge--square"><svg class="icon"><use href="#i-pipe" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-arrow" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-hex" /></svg></span>
+            </div>
+            <div class="case__tile">PRAX</div>
+            <p class="case__desc">물과 반응해 경화되는 수경화성 폴리우레탄 유리섬유 테이프입니다. 임시용 보수테이프와 달리 1회 시공으로 반영구적으로 쓸 수 있고, 강관, FRP관, 콘크리트관 등 다양한 배관의 파손, 균열, 누수를 보강합니다. <a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3&amp;wr_id=7" target="_blank" rel="noopener">카탈로그 보기.</a></p>
+            <dl class="rows">
+              <div class="rows__row"><dt>인장 강도 (ASTM D3039)</dt><dd>34,800 psi</dd></div>
+              <div class="rows__row"><dt>내압 시험 (HD, 7겹)</dt><dd>20 bar</dd></div>
+              <div class="rows__row"><dt>절연 파괴 강도 (ASTM D149)</dt><dd>4.3 kV/mm</dd></div>
+              <div class="rows__row"><dt>맞춤 제작</dt><dd>사이즈 · 색상 협의</dd></div>
+            </dl>
+          </div>
+          <div class="case__media">
+            <div class="case__track">
+              <figure class="media media--dither" style="--c: 1/15; --r: 1/14; --ar: 1"><img src="/images/industrial-flange-dither.png" alt="보수 테이프로 감싼 배관 플랜지 (디더링 이미지)" loading="lazy" /></figure>
+              <figure class="media media--bleed" style="--c: 16/25; --r: 7/14; --ar: 1.6"><img src="/images/industrial-racks.webp" alt="플랜트 배관 랙" loading="lazy" /></figure>
+              <figure class="media" style="--c: 1/8; --r: 18/27; --ar: 0.8"><img src="/images/industrial-roll-dark.webp" alt="파우치에서 꺼낸 배관 보수 테이프" loading="lazy" /></figure>
+              <figure class="media media--line" style="--c: 9/25; --r: 22/34; --ar: 1.35"><img src="/images/industrial-pipes-line.webp" alt="배관 네트워크 라인 드로잉" loading="lazy" /></figure>
+              <figure class="media" style="--c: 3/14; --r: 38/46; --ar: 1.5"><img src="/images/industrial-wrap.webp" alt="배관에 보수 테이프를 감는 모습" loading="lazy" /></figure>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04 -->
+        <section class="case" id="biz-04">
+          <header class="case__head">
+            <span class="case__num">04</span>
+            <div class="case__label">
+              <h2 class="case__title" data-lines>플랜트</h2>
+              <p class="case__meta">BL tech<br />Plant<br />Turnkey Export</p>
+            </div>
+            <button class="case__more" type="button" aria-expanded="false">More</button>
+          </header>
+          <div class="case__body">
+            <div class="case__icons">
+              <span class="badge badge--square"><svg class="icon"><use href="#i-factory" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-arrow" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-hex" /></svg></span>
+            </div>
+            <div class="case__tile"><img src="/brand/symbol-180.png" alt="" /></div>
+            <p class="case__desc">ISO 13485 품질시스템 기반의 정형외과용 부목 생산기술로, 현지 규제에 맞춘 생산라인을 구축합니다. 현장 실사와 설비 설계부터 발주, 생산 교육, 불량 분석 지원까지 고객의 사업 성공을 함께 만드는 토탈 파트너십입니다. <a href="#contact">플랜트 문의하기.</a></p>
+            <dl class="rows">
+              <div class="rows__row"><dt>수출 실적</dt><dd>말레이시아 · 사우디아라비아</dd></div>
+              <div class="rows__row"><dt>진행 단계</dt><dd>05</dd></div>
+              <div class="rows__row"><dt>소요 기간 (주문일 기준)</dt><dd>6개월</dd></div>
+            </dl>
+          </div>
+          <div class="case__media">
+            <div class="case__track">
+              <figure class="media media--dither" style="--c: 1/12; --r: 1/12; --ar: 1"><img src="/images/plant-rollers-dither.png" alt="코팅 설비 롤러 (디더링 이미지)" loading="lazy" /></figure>
+              <figure class="media media--bleed" style="--c: 13/25; --r: 5/14; --ar: 1.5"><img src="/images/plant-line.webp" alt="캐스팅 테이프 생산 라인" loading="lazy" /></figure>
+              <figure class="media" style="--c: 1/8; --r: 16/27; --ar: 0.67"><img src="/images/plant-qc.webp" alt="인장 시험기로 품질을 검사하는 모습" loading="lazy" /></figure>
+              <figure class="media media--line" style="--c: 9/25; --r: 20/32; --ar: 1.35"><img src="/images/plant-floor-line.webp" alt="생산 설비 배치 라인 드로잉" loading="lazy" /></figure>
+            </div>
+          </div>
+        </section>
+
+        <!-- Company -->
+        <section class="team" id="company">
+          <p class="list-head"><svg class="icon"><use href="#i-tick" /></svg>Company</p>
+          <div class="team__tags">
+            <span class="badge"><svg class="icon"><use href="#i-hex" /></svg></span>
+            <span class="tag tag--round">Since 2006</span>
+          </div>
+          <h2 class="display team__title" data-lines>2006년 설립 이래, 특허 폴리머 기술로 전 세계 36개국 이상에 제품을 공급하고 있습니다.</h2>
+          <ul class="members" aria-label="미션">
+            <li class="member member--value">
+              <div class="member__who">
+                <span class="member__photo member__mark"><svg class="icon"><use href="#i-molecule" /></svg></span>
+                <p class="member__name"><strong>Innovation</strong><span>혁신</span></p>
+                <button class="member__toggle" type="button" aria-expanded="false" aria-label="혁신 상세 보기"><svg class="icon"><use href="#i-plus" /></svg></button>
+              </div>
+              <div class="member__detail">
+                <p class="member__bio">혁신적인 기술 개발로 글로벌 시장에서 경쟁력을 확보합니다.</p>
+              </div>
+            </li>
+            <li class="member member--value">
+              <div class="member__who">
+                <span class="member__photo member__mark"><svg class="icon"><use href="#i-hex" /></svg></span>
+                <p class="member__name"><strong>Trust</strong><span>신뢰</span></p>
+                <button class="member__toggle" type="button" aria-expanded="false" aria-label="신뢰 상세 보기"><svg class="icon"><use href="#i-plus" /></svg></button>
+              </div>
+              <div class="member__detail">
+                <p class="member__bio">고객의 니즈에 맞춘 최상의 서비스를 제공해 신뢰를 쌓습니다.</p>
+              </div>
+            </li>
+            <li class="member member--value">
+              <div class="member__who">
+                <span class="member__photo member__mark"><svg class="icon"><use href="#i-arrow" /></svg></span>
+                <p class="member__name"><strong>Growth</strong><span>성장</span></p>
+                <button class="member__toggle" type="button" aria-expanded="false" aria-label="성장 상세 보기"><svg class="icon"><use href="#i-plus" /></svg></button>
+              </div>
+              <div class="member__detail">
+                <p class="member__bio">직원과 회사가 함께 성장하며 모두가 행복한 직장 문화를 만듭니다.</p>
+              </div>
+            </li>
+            <li class="member member--value">
+              <div class="member__who">
+                <span class="member__photo member__mark"><svg class="icon"><use href="#i-drop" /></svg></span>
+                <p class="member__name"><strong>Responsibility</strong><span>책임</span></p>
+                <button class="member__toggle" type="button" aria-expanded="false" aria-label="책임 상세 보기"><svg class="icon"><use href="#i-plus" /></svg></button>
+              </div>
+              <div class="member__detail">
+                <p class="member__bio">지속가능한 경영과 사회적 책임을 실천해 ESG 가치를 추구합니다.</p>
+              </div>
+            </li>
+            <li class="member member--value">
+              <div class="member__who">
+                <span class="member__photo member__mark"><svg class="icon"><use href="#i-plus" /></svg></span>
+                <p class="member__name"><strong>Fair</strong><span>공정</span></p>
+                <button class="member__toggle" type="button" aria-expanded="false" aria-label="공정 상세 보기"><svg class="icon"><use href="#i-plus" /></svg></button>
+              </div>
+              <div class="member__detail">
+                <p class="member__bio">윤리적이고 공정한 경영으로 모든 이해관계자에게 장기적인 가치를 제공합니다.</p>
+              </div>
+            </li>
+          </ul>
+          <div class="company">
+            <div class="company__block">
+              <p class="company__label">회사개요</p>
+              <dl class="rows rows--static">
+                <div class="rows__row"><dt>회사명</dt><dd>비엘테크(주) BL tech Co., Ltd.</dd></div>
+                <div class="rows__row"><dt>대표이사</dt><dd>배진우</dd></div>
+                <div class="rows__row"><dt>설립</dt><dd>2006년 5월 1일</dd></div>
+                <div class="rows__row"><dt>사업 분야</dt><dd>의료기기 제조 · 산업용 보수재 제조</dd></div>
+                <div class="rows__row"><dt>주요 제품</dt><dd>캐스팅 테이프 · 스플린트 · 하이드로겔 패치 · 산업용 보수테이프</dd></div>
+                <div class="rows__row"><dt>춘천 본사 · 제1공장</dt><dd>강원도 춘천시 퇴계농공로 84 (정형외과용 제품 제조)</dd></div>
+                <div class="rows__row"><dt>원주 제2공장</dt><dd>강원도 원주시 지정면 기업도시로 200, 1001호 (더마 케어 제품 제조)</dd></div>
+                <div class="rows__row"><dt>가평 사업장</dt><dd>경기도 가평군 북면 목동리 699-29 (정형외과용 원재료 제조)</dd></div>
+                <div class="rows__row"><dt>Tel / Fax</dt><dd>033-264-2686 / 031-629-5216</dd></div>
+              </dl>
+            </div>
+            <div class="company__block">
+              <p class="company__label">주요 연혁</p>
+              <dl class="rows rows--static">
+                <div class="rows__row"><dt>2006</dt><dd>비엘테크 설립 · ISO 9001 · 정형외과용 제품 CE</dd></div>
+                <div class="rows__row"><dt>2008</dt><dd>FDA 인증 · ISO 13485 · 100만불 수출의 탑</dd></div>
+                <div class="rows__row"><dt>2014</dt><dd>300만불 수출의 탑</dd></div>
+                <div class="rows__row"><dt>2019</dt><dd>NEAL 브랜드 일본 시장 점유율 1위</dd></div>
+                <div class="rows__row"><dt>2021</dt><dd>정형외과용 제품 라인 CE MDR</dd></div>
+                <div class="rows__row"><dt>2022</dt><dd>하이드로겔 피부보호대 브랜드 BEODERM 런칭</dd></div>
+                <div class="rows__row"><dt>2024</dt><dd>BEODERM 하이드로겔 스킨 프로텍터 CE MDR</dd></div>
+                <div class="rows__row"><dt>2025</dt><dd>500만불 수출의 탑</dd></div>
+              </dl>
+            </div>
+            <div class="company__block company__block--wide">
+              <p class="company__label">조직도</p>
+              <div class="org" role="group" aria-label="비엘테크 조직도">
+                <div class="org__top">
+                  <span class="org__node org__node--ceo">대표이사</span>
+                  <div class="org__board">
+                    <span class="org__node org__node--round">이사회</span>
+                    <span class="org__node org__node--round org__node--side">품질경영대리인</span>
+                  </div>
+                </div>
+                <ul class="org__teams">
+                  <li><span class="org__node">품질관리팀</span></li>
+                  <li><span class="org__node">기업부설연구소</span></li>
+                  <li><span class="org__node">관리팀</span>
+                    <ul class="org__parts">
+                      <li><span class="org__node org__node--part">회계파트</span></li>
+                      <li><span class="org__node org__node--part">인사/총무파트</span></li>
+                      <li><span class="org__node org__node--part">구매물류파트</span></li>
+                    </ul>
+                  </li>
+                  <li><span class="org__node">해외영업</span></li>
+                  <li><span class="org__node">국내영업</span></li>
+                  <li><span class="org__node">제조1팀</span>
+                    <ul class="org__parts">
+                      <li><span class="org__node org__node--part">생산관리파트</span></li>
+                      <li><span class="org__node org__node--part">생산지원파트<small>합성/배합/컷팅</small></span></li>
+                      <li><span class="org__node org__node--part">생산공정파트<small>캐스트/스프린트</small></span></li>
+                      <li><span class="org__node org__node--part">가공포장파트<small>프리컷/라벨/포장</small></span></li>
+                    </ul>
+                  </li>
+                  <li><span class="org__node">제조2팀<small>원단제작</small></span></li>
+                  <li><span class="org__node">제조3팀<small>하이드로겔</small></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="contact" id="contact">
+          <p class="list-head"><svg class="icon"><use href="#i-tick" /></svg>Contact</p>
+          <div class="tags"><span class="tag">Polymer Tech</span><i class="tags__line"></i><span class="tag tag--round">Better Life</span></div>
+          <h2 class="display contact__title" data-lines>제품 문의, OEM · ODM 협업, 대리점 문의를 편하게 남겨주세요.</h2>
+          <form class="form" data-form novalidate>
+            <label class="field"><span>이름*</span><input name="name" autocomplete="name" required placeholder="이름을 입력하세요" /></label>
+            <label class="field"><span>이메일*</span><input name="email" type="email" autocomplete="email" required placeholder="이메일을 입력하세요" /></label>
+            <label class="field field--wide"><span>메시지</span><textarea name="message" rows="3" placeholder="메시지를 입력하세요"></textarea></label>
+            <button class="submit" type="submit"><svg class="icon"><use href="#i-corner" /></svg><span>메시지 보내기</span></button>
+            <p class="form__status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="contact__art"><img src="/images/contact-platform-line.webp" alt="" loading="lazy" /></div>
+          <footer class="footer">
+            <div class="footer__links"><a href="tel:033-264-2686">TEL 033-264-2686 · FAX 031-629-5216</a><span>강원도 춘천시 퇴계농공로 84</span><span>© BL tech Co., Ltd.</span></div>
+            <div class="footer__badges">
+              <span class="badge badge--square"><svg class="icon"><use href="#i-plus" /></svg></span>
+              <span class="badge"><svg class="icon"><use href="#i-drop" /></svg></span>
+              <span class="badge badge--square"><svg class="icon"><use href="#i-molecule" /></svg></span>
+            </div>
+            <img class="footer__logo" src="/brand/logo-xl.png" alt="BL tech" loading="lazy" />
+          </footer>
+        </section>
+      </main>
+    </div>
+
+    <!-- Contact modal -->
+    <div class="modal" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+      <div class="modal__backdrop" data-contact-close></div>
+      <div class="modal__panel" data-lenis-prevent>
+        <div class="modal__top">
+          <p><svg class="icon"><use href="#i-tick" /></svg>Contact</p>
+          <button type="button" data-contact-close>닫기</button>
+        </div>
+        <h2 class="display modal__title" id="modal-title">함께 만들어 갈 파트너를 기다립니다.</h2>
+        <form class="form" data-form novalidate>
+          <label class="field"><span>이름*</span><input name="name" autocomplete="name" required placeholder="이름을 입력하세요" /></label>
+          <label class="field"><span>이메일*</span><input name="email" type="email" autocomplete="email" required placeholder="이메일을 입력하세요" /></label>
+          <label class="field field--wide"><span>메시지</span><textarea name="message" rows="3" placeholder="메시지를 입력하세요"></textarea></label>
+          <button class="submit" type="submit"><svg class="icon"><use href="#i-corner" /></svg><span>메시지 보내기</span></button>
+          <p class="form__status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

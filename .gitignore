@@ -1,0 +1,15 @@
+node_modules
+dist
+*.log
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# image sources: raw AI outputs and reference files stay on the local machine
+assets-src/
+
+# local tooling / unrelated documents in the project folder
+.claude/
+/*.docx
