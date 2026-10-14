@@ -71,6 +71,33 @@ function setModal(open: boolean) {
   }
 }
 
+// Mobile only: the org chart block turns into a full-screen "About Us" sheet (desktop shows it inline).
+const aboutSheet = $('#about-us');
+let aboutOpener: HTMLElement | null = null;
+
+function setAbout(open: boolean) {
+  if (!aboutSheet || aboutSheet.classList.contains('is-open') === open) return;
+  if (open && isDesktop()) return scrollToTarget(aboutSheet);
+  aboutSheet.classList.toggle('is-open', open);
+  $$('[data-about-open]').forEach((el) => el.setAttribute('aria-expanded', String(open)));
+  if (open) {
+    aboutOpener = document.activeElement as HTMLElement | null;
+    aboutSheet.setAttribute('role', 'dialog');
+    aboutSheet.setAttribute('aria-modal', 'true');
+    aboutSheet.setAttribute('data-lenis-prevent', '');
+    aboutSheet.scrollTop = 0;
+    setMenu(false);
+    lenis?.stop();
+    window.setTimeout(() => $('[data-about-close]', aboutSheet)?.focus({ preventScroll: true }), 450);
+  } else {
+    aboutSheet.removeAttribute('role');
+    aboutSheet.removeAttribute('aria-modal');
+    aboutSheet.removeAttribute('data-lenis-prevent');
+    lenis?.start();
+    aboutOpener?.focus({ preventScroll: true });
+  }
+}
+
 function toggleHeight(panel: HTMLElement, open: boolean) {
   gsap.to(panel, {
     height: open ? 'auto' : 0,
@@ -83,7 +110,7 @@ function toggleHeight(panel: HTMLElement, open: boolean) {
 function setupUi() {
   document.addEventListener('click', (event) => {
     const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
-    if (!link) return;
+    if (!link || link.hasAttribute('data-about-open')) return;
     event.preventDefault();
     setMenu(false);
     const href = link.getAttribute('href')!;
@@ -98,9 +125,18 @@ function setupUi() {
   menuButton?.addEventListener('click', () => setMenu(!root.classList.contains('menu-open')));
   $$('[data-contact-open]').forEach((button) => button.addEventListener('click', () => setModal(true)));
   $$('[data-contact-close]').forEach((button) => button.addEventListener('click', () => setModal(false)));
+  $$('[data-about-open]').forEach((el) =>
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      setAbout(true);
+    }),
+  );
+  $$('[data-about-close]').forEach((button) => button.addEventListener('click', () => setAbout(false)));
+  matchMedia(DESKTOP).addEventListener('change', (event) => event.matches && setAbout(false));
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
     setModal(false);
+    setAbout(false);
     setMenu(false);
   });
 

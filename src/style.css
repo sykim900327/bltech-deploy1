@@ -24,6 +24,7 @@
 
   --fs-display: clamp(40px, 4.2vw, 76px);
   --fs-title: clamp(54px, 5.6vw, 104px);
+  --fs-hero: clamp(34px, 3.6vw, 64px);
 }
 
 /* ==========================================================================
@@ -107,6 +108,12 @@ figure {
   font-size: var(--fs-display);
   line-height: 1.14;
   letter-spacing: -0.04em;
+  text-wrap: balance; /* even line lengths, no single-word last line */
+}
+
+/* keeps a phrase on one line (&nbsp; would be normalised away by SplitText) */
+.nowrap {
+  white-space: nowrap;
 }
 
 /* SplitText line masks */
@@ -494,9 +501,11 @@ figure {
   height: 24px;
 }
 
+/* the vision sentence is long, so the hero gets its own (smaller) size scale */
 .hero__title {
-  max-width: 13.5em;
+  max-width: 15em;
   margin-top: 16px;
+  font-size: var(--fs-hero);
 }
 
 .hero .tags {
@@ -794,6 +803,12 @@ figure {
 .company__block--wide {
   grid-template-columns: minmax(0, 1fr);
   row-gap: 40px;
+}
+
+/* mobile-only: About Us entry row and the sheet header */
+.about-trigger,
+.sheet-top {
+  display: none;
 }
 
 /* Org chart: CEO → board (+ QA representative) → a bus line feeding eight teams */
@@ -1156,7 +1171,8 @@ figure {
 @media (max-width: 991.98px) {
   :root {
     --pad: 16px;
-    --fs-display: clamp(27px, 7.4vw, 48px);
+    --fs-display: clamp(25px, 6vw, 40px);
+    --fs-hero: clamp(24px, 5.6vw, 40px);
   }
 
   .sidebar,
@@ -1571,90 +1587,241 @@ figure {
     gap: 12px;
   }
 
-  /* Org chart becomes an indented tree */
+  /* Overview: label above value (long addresses); history: narrow year column */
+  .company__block--overview .rows__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    padding: 10px 0;
+  }
+
+  .company__block--history .rows__row {
+    grid-template-columns: 52px minmax(0, 1fr);
+  }
+
+  /* About Us: an entry row in the page; the org chart opens as a full-screen sheet */
+  .about-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .about-trigger__label {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    line-height: 15px;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  .about-trigger__label .icon,
+  .sheet-top .icon {
+    width: 14px;
+    margin-right: 23px;
+  }
+
+  .about-trigger__title {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .about-trigger__icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .company__org {
+    position: fixed;
+    inset: 0;
+    z-index: 85;
+    display: block;
+    padding: 0 var(--pad) 48px;
+    background: var(--bg);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateY(100%);
+    visibility: hidden;
+    transition: transform 0.7s var(--ease), visibility 0s 0.7s;
+  }
+
+  .company__org.is-open {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.7s var(--ease);
+  }
+
+  .sheet-top {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-h);
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    font-size: 11px;
+    line-height: 15px;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  .sheet-top p {
+    display: flex;
+    align-items: center;
+  }
+
+  .sheet-top button {
+    min-height: 44px;
+    padding-left: 16px;
+  }
+
+  .company__org .company__label {
+    margin-bottom: 28px;
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  /* Compact org chart: CEO → board → teams as a two-column card grid */
   .org {
-    --org-rail: 22px;
+    --org-drop: 20px;
+    font-size: 13px;
   }
 
   .org__top {
-    align-items: flex-start;
+    align-items: stretch;
   }
 
-  .org__board::before {
-    left: var(--org-rail);
+  .org__node--ceo {
+    width: 100%;
+  }
+
+  .org__board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
   }
 
   .org__node--side {
-    left: calc(100% + 24px);
+    position: relative;
+    left: auto;
   }
 
   .org__node--side::before {
+    right: 100%;
     width: 24px;
   }
 
   .org__teams {
-    display: block;
-    padding-top: 18px;
-  }
-
-  .org__teams::before {
-    left: var(--org-rail);
-    height: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding-top: calc(var(--org-drop) * 2);
   }
 
   .org__teams::after {
+    left: 25%;
+    right: 25%;
+  }
+
+  .org__teams > li {
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--ink);
+  }
+
+  .org__teams > li:nth-child(n + 3)::before {
     display: none;
   }
 
-  .org__teams > li,
-  .org__parts li {
-    display: block;
-    margin: 0;
-    padding: 6px 0 6px calc(var(--org-rail) + 18px);
-  }
-
-  .org__teams > li::before,
-  .org__parts li::before {
-    top: 25px;
-    bottom: auto;
-    left: var(--org-rail);
-    width: 14px;
-    height: 1px;
-  }
-
-  /* vertical rail: full height except on the last item, where it stops at the tick */
-  .org__teams > li::after,
-  .org__parts li::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: var(--org-rail);
-    width: 1px;
-    background: var(--org-line);
-  }
-
-  .org__teams > li:last-child::after,
-  .org__parts li:last-child::after {
-    bottom: auto;
-    height: 26px;
-  }
-
-  .org__parts li::after {
-    background: var(--line-box);
-  }
-
-  .org__parts {
-    --org-rail: 18px;
-  }
-
-  .org__node {
+  .org__teams > li > .org__node {
+    min-height: 0;
+    padding: 0;
+    border: 0;
     align-items: flex-start;
     text-align: left;
+    font-weight: 600;
   }
 
   .org__node small {
-    display: inline;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  /* teams with sub-parts take a full row, so paired cards never stretch around empty space */
+  .org__teams > li:has(.org__parts) {
+    grid-column: 1 / -1;
+  }
+
+  .org__parts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+
+  .org__parts li {
+    margin: 0;
+  }
+
+  .org__parts li::before {
+    display: none;
+  }
+
+  .org__node--part {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    align-items: flex-start;
+    text-align: left;
+    font-size: 12px;
+  }
+
+  /* Readability + touch: larger body copy, 44px-ish hit areas on small controls */
+  .case__desc,
+  .member__bio {
+    font-size: 14px;
+  }
+
+  .rows__row {
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .btn-circle,
+  .btn-square,
+  .member__toggle,
+  .case__more {
+    position: relative;
+  }
+
+  .btn-circle::after,
+  .btn-square::after,
+  .member__toggle::after,
+  .case__more::after {
+    content: '';
+    position: absolute;
+    inset: -9px -4px;
+  }
+
+  .case__desc a {
+    padding-block: 6px;
+  }
+
+  .footer__links a {
+    padding-block: 6px;
   }
 
   /* Contact */

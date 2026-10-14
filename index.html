@@ -44,8 +44,9 @@
       <ul class="m-menu__list">
         <li><a href="#business"><span>01</span>Business</a></li>
         <li><a href="#company"><span>02</span>Company</a></li>
-        <li><a href="#contact"><span>03</span>Contact</a></li>
-        <li><a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3" target="_blank" rel="noopener"><span>04</span>Catalog</a></li>
+        <li><a href="#about-us" data-about-open><span>03</span>About Us</a></li>
+        <li><a href="#contact"><span>04</span>Contact</a></li>
+        <li><a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3" target="_blank" rel="noopener"><span>05</span>Catalog</a></li>
       </ul>
       <p class="m-menu__foot"><a href="tel:033-264-2686">TEL 033-264-2686</a></p>
     </nav>
@@ -82,7 +83,7 @@
         <!-- Hero -->
         <section class="hero">
           <p class="hero__label"><svg class="icon"><use href="#i-molecule" /></svg>Vision</p>
-          <h1 class="display hero__title" data-lines>글로벌 경쟁력을 갖춘 기술 혁신과 윤리를 바탕으로, 고객, 직원, 주주와 함께 성장하며 지속가능한 가치를 창출하는 회사</h1>
+          <h1 class="display hero__title" data-lines>글로벌 경쟁력을 갖춘 <span class="nowrap">기술 혁신과</span> 윤리를 바탕으로, 고객, 직원, 주주와 함께 성장하며 지속가능한 가치를 <span class="nowrap">창출하는 회사</span></h1>
           <div class="hero__symbol"><img src="/images/brand-symbol-line.webp" alt="" /></div>
           <div class="tags"><span class="tag">Polymer Tech</span><i class="tags__line"></i><span class="tag tag--round">Better Life</span></div>
         </section>
@@ -296,7 +297,7 @@
             </li>
           </ul>
           <div class="company">
-            <div class="company__block">
+            <div class="company__block company__block--overview">
               <p class="company__label">회사개요</p>
               <dl class="rows rows--static">
                 <div class="rows__row"><dt>회사명</dt><dd>비엘테크(주) BL tech Co., Ltd.</dd></div>
@@ -310,7 +311,7 @@
                 <div class="rows__row"><dt>Tel / Fax</dt><dd>033-264-2686 / 031-629-5216</dd></div>
               </dl>
             </div>
-            <div class="company__block">
+            <div class="company__block company__block--history">
               <p class="company__label">주요 연혁</p>
               <dl class="rows rows--static">
                 <div class="rows__row"><dt>2006</dt><dd>비엘테크 설립 · ISO 9001 · 정형외과용 제품 CE</dd></div>
@@ -323,8 +324,18 @@
                 <div class="rows__row"><dt>2025</dt><dd>500만불 수출의 탑</dd></div>
               </dl>
             </div>
-            <div class="company__block company__block--wide">
-              <p class="company__label">조직도</p>
+            <!-- Mobile: the org chart opens as a full-screen "About Us" sheet; desktop shows it inline. -->
+            <button class="about-trigger" type="button" data-about-open aria-controls="about-us" aria-expanded="false">
+              <span class="about-trigger__label"><svg class="icon"><use href="#i-tick" /></svg>About Us</span>
+              <span class="about-trigger__title">조직도 보기</span>
+              <svg class="icon about-trigger__icon"><use href="#i-plus" /></svg>
+            </button>
+            <div class="company__block company__block--wide company__org" id="about-us" aria-labelledby="about-us-title">
+              <div class="sheet-top">
+                <p><svg class="icon"><use href="#i-tick" /></svg>About Us</p>
+                <button type="button" data-about-close>닫기</button>
+              </div>
+              <p class="company__label" id="about-us-title">조직도</p>
               <div class="org" role="group" aria-label="비엘테크 조직도">
                 <div class="org__top">
                   <span class="org__node org__node--ceo">대표이사</span>
