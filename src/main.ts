@@ -8,7 +8,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
-import { applyLanguage, switchLanguage, takeSwitchState, t, type Lang } from './i18n';
+import { applyLanguage, lang, switchLanguage, takeSwitchState, t, type Lang } from './i18n';
+import { labels, products, tabs, type Product } from './products';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -217,7 +218,86 @@ function setupUi() {
   }
 }
 
-const SECTION_IDS = ['biz-01', 'biz-02', 'biz-03', 'biz-04', 'company', 'certifications', 'contact'];
+const SECTION_IDS = ['biz-01', 'biz-02', 'biz-03', 'biz-04', 'products', 'company', 'certifications', 'contact'];
+
+// ---------------------------------------------------------------------------
+// Products: category tabs + expandable product sheets (data in src/products.ts)
+// ---------------------------------------------------------------------------
+const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+function productHtml(p: Product, open: boolean) {
+  const copy = p[lang];
+  const L = labels[lang];
+  const rows = (items: [string, string][]) => items.map(([dt, dd]) => `<div><dt>${esc(dt)}</dt><dd>${esc(dd)}</dd></div>`).join('');
+  const blocks = [
+    copy.uses &&
+      `<div class="prod__block"><p class="prod__label">${L.uses}</p><dl class="prod__uses">${rows(copy.uses)}</dl>${
+        copy.uses.some(([, v]) => v.includes('*')) ? `<p class="prod__note">${L.note}</p>` : ''
+      }</div>`,
+    copy.features.length && `<div class="prod__block"><p class="prod__label">${L.features}</p><dl class="prod__features">${rows(copy.features)}</dl></div>`,
+    copy.types &&
+      `<div class="prod__block"><p class="prod__label">${L.types}</p><div class="prod__types">${copy.types
+        .map(([name, items]) => `<div class="ptype"><p class="ptype__name">${esc(name)}</p><ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>`)
+        .join('')}</div></div>`,
+  ].filter(Boolean);
+  return `<li class="prod${open ? ' is-open' : ''}">
+    <button class="prod__head" type="button" aria-expanded="${open}" aria-controls="prod-${p.id}">
+      <span class="prod__img"><img src="${p.img}" alt="${esc(p.name)}" width="640" height="650" loading="lazy" /></span>
+      <span class="prod__text"><span class="prod__sub">${esc(p.sub)}</span><strong class="prod__name">${esc(p.name)}</strong><span class="prod__tagline">${esc(copy.tagline)}</span></span>
+      <svg class="icon prod__icon"><use href="#i-plus" /></svg>
+    </button>
+    <div class="prod__body" id="prod-${p.id}"${open ? '' : ' style="height: 0"'}><div class="prod__inner">${blocks.join('')}</div></div>
+  </li>`;
+}
+
+function renderProducts() {
+  const tabBar = $('[data-product-tabs]');
+  const panels = $('[data-product-panels]');
+  if (!tabBar || !panels) return;
+  const count = (id: string) => String(products.filter((p) => p.tab === id).length).padStart(2, '0');
+  tabBar.innerHTML = tabs
+    .map((tab, i) => `<button type="button" role="tab" id="ptab-${tab.id}" aria-controls="ppanel-${tab.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${esc(tab[lang])}<span>${count(tab.id)}</span></button>`)
+    .join('');
+  panels.innerHTML = tabs
+    .map(
+      (tab, i) =>
+        `<div class="ppanel" role="tabpanel" id="ppanel-${tab.id}" aria-labelledby="ptab-${tab.id}"${i ? ' hidden' : ''}><ul class="plist">${products
+          .filter((p) => p.tab === tab.id)
+          .map((p, j) => productHtml(p, j === 0))
+          .join('')}</ul></div>`,
+    )
+    .join('');
+
+  // Tabs (click + arrow keys)
+  const tabButtons = $$<HTMLButtonElement>('[role="tab"]', tabBar);
+  const select = (index: number) => {
+    tabButtons.forEach((button, i) => {
+      const on = i === index;
+      button.setAttribute('aria-selected', String(on));
+      button.tabIndex = on ? 0 : -1;
+      $(`#${button.getAttribute('aria-controls')}`)!.hidden = !on;
+    });
+    tabButtons[index].focus({ preventScroll: true });
+    ScrollTrigger.refresh();
+  };
+  tabButtons.forEach((button, i) => {
+    button.addEventListener('click', () => select(i));
+    button.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') select((i + 1) % tabButtons.length);
+      if (event.key === 'ArrowLeft') select((i - 1 + tabButtons.length) % tabButtons.length);
+    });
+  });
+
+  // Product sheets
+  $$('.prod__head', panels).forEach((head) =>
+    head.addEventListener('click', () => {
+      const open = head.getAttribute('aria-expanded') !== 'true';
+      head.setAttribute('aria-expanded', String(open));
+      head.parentElement!.classList.toggle('is-open', open);
+      toggleHeight(head.nextElementSibling as HTMLElement, open);
+    }),
+  );
+}
 
 /** id of the section currently being read ('' while still in the hero). */
 function currentSectionId() {
@@ -348,6 +428,7 @@ function formatNumber(value: number, template: string) {
 function setupScroll() {
   const mm = gsap.matchMedia();
   const cases = $$('.case');
+  const productsSection = $('#products')!;
   const team = $('#company')!;
   const certs = $('#certifications')!;
   const contact = $('#contact')!;
@@ -450,6 +531,7 @@ function setupScroll() {
     // Nav pills follow the section in view
     const navRanges: [string, Element, Element][] = [
       ['business', cases[0], cases[cases.length - 1]],
+      ['products', productsSection, productsSection],
       ['company', team, certs],
       ['contact', contact, contact],
     ];
@@ -581,6 +663,7 @@ function introHero() {
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 applyLanguage(); // before anything measures, splits or clones the text
+renderProducts();
 const returnTo = takeSwitchState();
 setupMarquee();
 setupUi();

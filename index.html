@@ -54,11 +54,12 @@
     <nav class="m-menu" id="m-menu" aria-label="모바일 메뉴" data-i18n-attr="aria-label:ui.mobileMenu">
       <ul class="m-menu__list">
         <li><a href="#business"><span>01</span>Business</a></li>
-        <li><a href="#company"><span>02</span>Company</a></li>
-        <li><a href="#about-us" data-about-open><span>03</span>About Us</a></li>
-        <li><a href="#certifications"><span>04</span>Certifications</a></li>
-        <li><a href="#contact"><span>05</span>Contact</a></li>
-        <li><a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3" target="_blank" rel="noopener" data-i18n-attr="href:link.catalog"><span>06</span>Catalog</a></li>
+        <li><a href="#products"><span>02</span>Products</a></li>
+        <li><a href="#company"><span>03</span>Company</a></li>
+        <li><a href="#about-us" data-about-open><span>04</span>About Us</a></li>
+        <li><a href="#certifications"><span>05</span>Certifications</a></li>
+        <li><a href="#contact"><span>06</span>Contact</a></li>
+        <li><a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3" target="_blank" rel="noopener" data-i18n-attr="href:link.catalog"><span>07</span>Catalog</a></li>
       </ul>
       <p class="m-menu__foot"><a href="tel:+82-33-264-2686" data-i18n="tel.short">TEL 033-264-2686</a></p>
     </nav>
@@ -67,6 +68,7 @@
     <div class="topnav">
       <nav class="pills" aria-label="주요 메뉴" data-i18n-attr="aria-label:ui.mainNav">
         <a href="#business" data-nav="business">Business</a>
+        <a href="#products" data-nav="products">Products</a>
         <a href="#company" data-nav="company">Company</a>
         <a href="#contact" data-nav="contact">Contact</a>
         <a href="http://www.bl-tech.co.kr/bbs/board.php?bo_table=sub4_3" target="_blank" rel="noopener" data-i18n-attr="href:link.catalog">Catalog</a>
@@ -252,6 +254,18 @@
               <figure class="media media--line" style="--c: 9/25; --r: 20/32; --ar: 1.35"><img src="/images/plant-floor-line.webp" alt="생산 설비 배치 라인 드로잉" data-i18n-attr="alt:b4.alt4" loading="lazy" /></figure>
             </div>
           </div>
+        </section>
+
+        <!-- Products: category tabs + expandable product sheets, rendered from src/products.ts -->
+        <section class="products" id="products">
+          <p class="list-head"><svg class="icon"><use href="#i-tick" /></svg>Products</p>
+          <div class="team__tags">
+            <span class="badge"><svg class="icon"><use href="#i-molecule" /></svg></span>
+            <span class="tag tag--round">Product Line-up</span>
+          </div>
+          <h2 class="display team__title" data-lines data-i18n="pr.title">정형외과용 캐스트·스플린트부터 하이드로겔, 산업용 보수재까지 17개 품목을 소개합니다.</h2>
+          <div class="ptabs" role="tablist" aria-label="제품군" data-i18n-attr="aria-label:pr.tabs" data-product-tabs></div>
+          <div data-product-panels></div>
         </section>
 
         <!-- Company -->

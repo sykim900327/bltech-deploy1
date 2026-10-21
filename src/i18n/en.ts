@@ -98,6 +98,10 @@ export const en: Record<string, string> = {
   'b4.alt3': 'Quality inspection on a tensile tester',
   'b4.alt4': 'Line drawing of a production floor layout',
 
+  // Products (the product sheets themselves come from src/products.ts)
+  'pr.title': 'From orthopedic casts and splints to hydrogel and industrial repair tape — explore our 17 products.',
+  'pr.tabs': 'Product categories',
+
   // Company
   'co.title': 'Since 2006, our patented polymer technology has reached more than 36 countries.',
   'co.v1': 'Global competitiveness',

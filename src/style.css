@@ -1008,6 +1008,225 @@ html[lang='en'] .hero__title {
 }
 
 /* ==========================================================================
+   Products: category tabs + expandable product sheets
+   ========================================================================== */
+.products {
+  position: relative;
+  padding-bottom: 120px;
+}
+
+.ptabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 110px;
+}
+
+.ptabs button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-size: 12px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.ptabs button span {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ptabs button:hover {
+  background: rgba(38, 41, 51, 0.08);
+}
+
+.ptabs button[aria-selected='true'] {
+  background: #000;
+  color: #fff;
+}
+
+.ptabs button[aria-selected='true'] span {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.plist {
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.prod {
+  border-top: 1px solid var(--line);
+}
+
+.prod__head {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr) 28px;
+  column-gap: 28px;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0;
+  text-align: left;
+}
+
+.prod__img {
+  display: block;
+  width: 116px;
+  height: 116px;
+  overflow: hidden;
+  background: var(--tile);
+}
+
+.prod__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease);
+}
+
+.prod__head:hover .prod__img img {
+  transform: scale(1.05);
+}
+
+.prod__text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.prod__sub {
+  font-size: 11px;
+  line-height: 15px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.prod__name {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.prod__tagline {
+  max-width: 46em;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.prod__icon {
+  width: 20px;
+  height: 20px;
+  justify-self: end;
+  transition: transform 0.5s var(--ease);
+}
+
+.prod.is-open .prod__icon {
+  transform: rotate(45deg);
+}
+
+.prod__body {
+  overflow: hidden;
+}
+
+.prod__inner {
+  padding: 4px 0 44px calc(116px + 28px);
+}
+
+.prod__block + .prod__block {
+  margin-top: 32px;
+}
+
+.prod__label {
+  margin-bottom: 12px;
+  font-size: 11px;
+  line-height: 15px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.prod__features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 28px;
+}
+
+.prod__features dt,
+.ptype__name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.prod__features dd {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.prod__uses div {
+  display: grid;
+  grid-template-columns: 26% minmax(0, 1fr);
+  gap: 16px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.prod__uses div:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.prod__uses dt {
+  color: var(--muted);
+}
+
+.prod__note {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.prod__types {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px 28px;
+}
+
+.ptype ul {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ptype li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.ptype li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+
+/* ==========================================================================
    Certifications: summary figures, then a thumbnail grid per group
    ========================================================================== */
 .certs {
@@ -2119,6 +2338,71 @@ html[lang='en'] .hero__title {
 
   .footer__links a {
     padding-block: 6px;
+  }
+
+  /* Products */
+  .products {
+    padding: 40px 0 72px;
+  }
+
+  .ptabs {
+    flex-wrap: nowrap;
+    margin: 40px calc(var(--pad) * -1) 0;
+    padding: 0 var(--pad);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ptabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ptabs button {
+    height: 38px;
+  }
+
+  .plist {
+    margin-top: 24px;
+  }
+
+  .prod__head {
+    grid-template-columns: 72px minmax(0, 1fr) 24px;
+    column-gap: 14px;
+    padding: 16px 0;
+  }
+
+  .prod__img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .prod__name {
+    font-size: 22px;
+  }
+
+  .prod__tagline {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .prod.is-open .prod__tagline {
+    display: block;
+  }
+
+  .prod__inner {
+    padding: 0 0 32px;
+  }
+
+  .prod__features,
+  .prod__types {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .prod__uses div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
   }
 
   /* Certifications */
