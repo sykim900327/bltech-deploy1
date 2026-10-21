@@ -5,7 +5,7 @@
 //   line         → ink lines on transparent background (lossless WebP), trimmed
 //   dither-beige → 1-bit Atkinson dither, ink on beige paper (PNG)
 //   dither-grey  → 1-bit Atkinson dither, ink on light grey paper (PNG)
-import { mkdir, access } from 'node:fs/promises';
+import { mkdir, access, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import { images } from './images.manifest.mjs';
@@ -187,5 +187,23 @@ async function processBrand() {
   console.log(`✓ brand (logo ${W}x${H}, ${comps.length} blobs)`);
 }
 
+// Certificate scans (assets-src/certs/<id>.png, from the company site): grid thumbnail + large version for the viewer.
+// The viewer derives the large file from the thumbnail name (<id>.webp → <id>-lg.webp).
+async function processCerts() {
+  const srcDir = path.join(ROOT, 'assets-src', 'certs');
+  const outDir = path.join(ROOT, 'public', 'certs');
+  if (!(await exists(srcDir))) return console.warn('- 인증서 원본 없음 (건너뜀)');
+  await mkdir(outDir, { recursive: true });
+  const files = (await readdir(srcDir)).filter((f) => f.endsWith('.png'));
+  for (const file of files) {
+    const id = file.replace(/\.png$/, '');
+    const src = sharp(path.join(srcDir, file)).flatten({ background: '#ffffff' });
+    await src.clone().resize({ width: 360 }).webp({ quality: 78 }).toFile(path.join(outDir, `${id}.webp`));
+    await src.clone().resize({ width: 1240, withoutEnlargement: true }).webp({ quality: 80 }).toFile(path.join(outDir, `${id}-lg.webp`));
+  }
+  console.log(`✓ certs (${files.length} × thumbnail + large)`);
+}
+
 await processImages();
 await processBrand();
+await processCerts();

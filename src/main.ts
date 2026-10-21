@@ -8,6 +8,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
+import { applyLanguage, switchLanguage, takeSwitchState, t, type Lang } from './i18n';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -135,10 +136,16 @@ function setupUi() {
   matchMedia(DESKTOP).addEventListener('change', (event) => event.matches && setAbout(false));
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
+    closeLightbox();
     setModal(false);
     setAbout(false);
     setMenu(false);
   });
+
+  // KO / EN: reloads in the other language and comes back to the section being read
+  $$('[data-lang]').forEach((button) =>
+    button.addEventListener('click', () => switchLanguage(button.dataset.lang as Lang, currentSectionId())),
+  );
 
   $$('[data-next]').forEach((button) =>
     button.addEventListener('click', () => {
@@ -176,10 +183,10 @@ function setupUi() {
         valid &&= ok;
       });
       if (!valid) {
-        status.textContent = '이름과 이메일을 확인해 주세요.';
+        status.textContent = t('form.invalid');
         return;
       }
-      status.textContent = '온라인 문의 접수는 준비 중입니다. 전화(033-264-2686)로 연락 주시면 빠르게 안내해 드리겠습니다.';
+      status.textContent = t('form.pending');
     });
     form.addEventListener('input', (event) => (event.target as Element).closest('.field')?.classList.remove('is-invalid'));
   });
@@ -208,6 +215,87 @@ function setupUi() {
       cursor.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
     });
   }
+}
+
+const SECTION_IDS = ['biz-01', 'biz-02', 'biz-03', 'biz-04', 'company', 'certifications', 'contact'];
+
+/** id of the section currently being read ('' while still in the hero). */
+function currentSectionId() {
+  let id = '';
+  for (const sectionId of SECTION_IDS) {
+    const el = document.getElementById(sectionId);
+    if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.35) id = sectionId;
+  }
+  return id;
+}
+
+// Certificate viewer: each card opens its large scan; buttons, arrow keys and swipes step through all of them.
+let closeLightbox = () => {};
+
+function setupLightbox() {
+  const box = $('#lightbox');
+  const cards = $$<HTMLButtonElement>('.cert__btn');
+  if (!box || !cards.length) return;
+  const img = $<HTMLImageElement>('.lightbox__img', box)!;
+  const name = $('[data-lb-name]', box)!;
+  const meta = $('[data-lb-meta]', box)!;
+  const counter = $('[data-lb-index]', box)!;
+  $('[data-lb-total]', box)!.textContent = String(cards.length);
+  let current = 0;
+  let opener: HTMLElement | null = null;
+
+  const show = (index: number) => {
+    current = (index + cards.length) % cards.length;
+    const card = cards[current];
+    const thumb = $<HTMLImageElement>('img', card)!;
+    const thumbSrc = thumb.currentSrc || thumb.src;
+    // show the (cached) thumbnail at once, then swap in the large scan: name.webp → name-lg.webp
+    img.src = thumbSrc;
+    const large = new Image();
+    large.onload = () => {
+      if (cards[current] === card) img.src = large.src;
+    };
+    large.src = thumbSrc.replace(/\.webp$/, '-lg.webp');
+    img.alt = name.textContent = $('.cert__name', card)!.textContent ?? '';
+    meta.textContent = $('.cert__meta', card)!.textContent;
+    counter.textContent = String(current + 1);
+  };
+
+  const open = (index: number) => {
+    opener = document.activeElement as HTMLElement | null;
+    show(index);
+    box.classList.add('is-open');
+    box.setAttribute('aria-hidden', 'false');
+    setMenu(false);
+    lenis?.stop();
+    window.setTimeout(() => $('button[data-lightbox-close]', box)?.focus({ preventScroll: true }), 300);
+  };
+
+  closeLightbox = () => {
+    if (!box.classList.contains('is-open')) return;
+    box.classList.remove('is-open');
+    box.setAttribute('aria-hidden', 'true');
+    lenis?.start();
+    opener?.focus({ preventScroll: true });
+  };
+
+  cards.forEach((card, i) => card.addEventListener('click', () => open(i)));
+  $$('[data-lightbox-close]', box).forEach((el) => el.addEventListener('click', () => closeLightbox()));
+  $('[data-lb-prev]', box)!.addEventListener('click', () => show(current - 1));
+  $('[data-lb-next]', box)!.addEventListener('click', () => show(current + 1));
+  document.addEventListener('keydown', (event) => {
+    if (!box.classList.contains('is-open')) return;
+    if (event.key === 'ArrowLeft') show(current - 1);
+    if (event.key === 'ArrowRight') show(current + 1);
+  });
+  let touchX: number | null = null;
+  box.addEventListener('touchstart', (event) => (touchX = event.touches[0].clientX), { passive: true });
+  box.addEventListener('touchend', (event) => {
+    if (touchX === null) return;
+    const dx = event.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+    touchX = null;
+  });
 }
 
 // Mobile marquee: duplicate each collage so the strip can loop seamlessly (clones are hidden on desktop).
@@ -261,6 +349,7 @@ function setupScroll() {
   const mm = gsap.matchMedia();
   const cases = $$('.case');
   const team = $('#company')!;
+  const certs = $('#certifications')!;
   const contact = $('#contact')!;
 
   // Shared (desktop + mobile)
@@ -279,7 +368,7 @@ function setupScroll() {
     );
 
     // Count-up for numeric values ("38%", "12,000+", "05"…)
-    const counters = $$('.rows:not(.rows--static) dd').flatMap((dd) => {
+    const counters = $$('.rows:not(.rows--static) dd, .cert-stats dd').flatMap((dd) => {
       const match = dd.textContent!.trim().match(/^(\d[\d,]*(?:\.\d+)?)(.*)$/);
       if (!match) return [];
       const [original, digits, suffix] = match;
@@ -361,7 +450,7 @@ function setupScroll() {
     // Nav pills follow the section in view
     const navRanges: [string, Element, Element][] = [
       ['business', cases[0], cases[cases.length - 1]],
-      ['company', team, team],
+      ['company', team, certs],
       ['contact', contact, contact],
     ];
     for (const [key, start, end] of navRanges) {
@@ -416,16 +505,18 @@ function setupScroll() {
       }),
     );
 
-    // Team
-    gsap.from('.team__tags > *', {
-      autoAlpha: 0,
-      y: 12,
-      stagger: 0.08,
-      duration: 1,
-      ease: 'expo.out',
-      scrollTrigger: { trigger: team, start: 'top 85%', once: true },
-    });
-    $$('.member, .company__block').forEach((member) =>
+    // Company + certifications
+    $$('.team__tags').forEach((tags) =>
+      gsap.from(tags.children, {
+        autoAlpha: 0,
+        y: 12,
+        stagger: 0.08,
+        duration: 1,
+        ease: 'expo.out',
+        scrollTrigger: { trigger: tags, start: 'top 85%', once: true },
+      }),
+    );
+    $$('.member, .company__block, .cert-stats, .cert-group').forEach((member) =>
       gsap.from(member, {
         autoAlpha: 0,
         y: 32,
@@ -440,7 +531,7 @@ function setupScroll() {
 // ---------------------------------------------------------------------------
 // Preloader → hero intro
 // ---------------------------------------------------------------------------
-async function runPreloader(onLift: () => void) {
+async function runPreloader(onLift: () => void, quick: boolean) {
   const el = $('.preloader');
   if (!el || reduceMotion) {
     el?.remove();
@@ -448,21 +539,28 @@ async function runPreloader(onLift: () => void) {
     return;
   }
   lenis?.stop();
-  const count = $('[data-count]', el)!;
-  const state = { value: 0 };
-  await Promise.all([
-    gsap.to(state, {
-      value: 100,
-      duration: 1.5,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        count.textContent = String(Math.round(state.value)).padStart(3, '0');
-      },
-    }),
-    document.fonts.ready,
-  ]);
-  window.setTimeout(onLift, 350);
-  await gsap.to(el, { yPercent: -100, duration: 1.1, ease: 'expo.inOut' });
+  if (quick) {
+    // after a language switch: no counter, just fade out once the fonts are in
+    await document.fonts.ready;
+    onLift();
+    await gsap.to(el, { autoAlpha: 0, duration: 0.35, ease: 'power1.out' });
+  } else {
+    const count = $('[data-count]', el)!;
+    const state = { value: 0 };
+    await Promise.all([
+      gsap.to(state, {
+        value: 100,
+        duration: 1.5,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          count.textContent = String(Math.round(state.value)).padStart(3, '0');
+        },
+      }),
+      document.fonts.ready,
+    ]);
+    window.setTimeout(onLift, 350);
+    await gsap.to(el, { yPercent: -100, duration: 1.1, ease: 'expo.inOut' });
+  }
   el.remove();
   lenis?.start();
 }
@@ -470,7 +568,7 @@ async function runPreloader(onLift: () => void) {
 function introHero() {
   if (reduceMotion) return;
   revealLines($('.hero__title')!, false);
-  gsap.from(['.hero__label', '.hero .tags', '.sidebar__logo', '.index', '.pills', '.cta', '.m-header'], {
+  gsap.from(['.hero__label', '.hero .tags', '.sidebar__logo', '.index', '.topnav', '.cta', '.m-header'], {
     autoAlpha: 0,
     y: 10,
     duration: 1.1,
@@ -482,8 +580,17 @@ function introHero() {
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
+applyLanguage(); // before anything measures, splits or clones the text
+const returnTo = takeSwitchState();
 setupMarquee();
 setupUi();
+setupLightbox();
 setupScroll();
-runPreloader(introHero).then(() => ScrollTrigger.refresh());
+runPreloader(introHero, returnTo !== null).then(() => {
+  ScrollTrigger.refresh();
+  const target = returnTo ? document.getElementById(returnTo) : null;
+  if (!target) return;
+  if (lenis) lenis.scrollTo(target, { offset: headerOffset(), immediate: true });
+  else window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY + headerOffset() });
+});
 document.fonts.ready.then(() => ScrollTrigger.refresh());

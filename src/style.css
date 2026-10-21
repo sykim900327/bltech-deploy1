@@ -282,13 +282,47 @@ figure {
 /* ==========================================================================
    Fixed UI (desktop): nav pills + CTA
    ========================================================================== */
-.pills {
+.topnav {
   position: fixed;
   top: var(--pad);
   right: var(--pad);
   z-index: 50;
   display: flex;
+  gap: 8px;
+}
+
+.pills,
+.lang {
+  display: flex;
   border: 1px solid var(--ink);
+}
+
+/* KO / EN switch (desktop top bar + mobile header) */
+.lang button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 26px;
+  padding: 0 8px;
+  border-left: 1px solid var(--ink);
+  font-size: 11px;
+  line-height: 15px;
+  letter-spacing: 0.01em;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.lang button:first-child {
+  border-left: 0;
+}
+
+.lang button:hover {
+  background: rgba(38, 41, 51, 0.08);
+}
+
+.lang button[aria-pressed='true'] {
+  background: #000;
+  color: #fff;
 }
 
 .pills a {
@@ -424,6 +458,10 @@ figure {
   border-bottom: 1px solid var(--line);
 }
 
+.index__item b {
+  font-weight: inherit;
+}
+
 .index__head .icon,
 .index__item span {
   width: 36px;
@@ -506,6 +544,11 @@ figure {
   max-width: 15em;
   margin-top: 16px;
   font-size: var(--fs-hero);
+}
+
+/* Latin glyphs are narrower: a wider measure keeps the English line count close to the Korean one */
+html[lang='en'] .hero__title {
+  max-width: 17em;
 }
 
 .hero .tags {
@@ -965,6 +1008,260 @@ figure {
 }
 
 /* ==========================================================================
+   Certifications: summary figures, then a thumbnail grid per group
+   ========================================================================== */
+.certs {
+  position: relative;
+  padding-bottom: 120px;
+}
+
+.cert-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 110px;
+  border-top: 1px solid var(--line);
+}
+
+.cert-stats > div {
+  padding: 20px 20px 0 0;
+}
+
+.cert-stats dt {
+  font-size: 11px;
+  line-height: 15px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cert-stats dd {
+  margin-top: 16px;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(48px, 4.4vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cert-group {
+  display: grid;
+  grid-template-columns: 184px minmax(0, 1fr);
+  column-gap: 28px;
+  padding: 20px 0 80px;
+  border-top: 1px solid var(--line);
+}
+
+.cert-stats + .cert-group {
+  margin-top: 110px;
+}
+
+.cert-group__label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cert-group__count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 32px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cert__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+}
+
+.cert__thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 360 / 509;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--tile);
+}
+
+.cert__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease);
+}
+
+/* zoom hint: a small ink circle with a plus */
+.cert__thumb::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background:
+    linear-gradient(#fff, #fff) center / 10px 1px no-repeat,
+    linear-gradient(#fff, #fff) center / 1px 10px no-repeat,
+    var(--ink);
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.3s, transform 0.5s var(--ease);
+}
+
+.cert__btn:hover .cert__thumb img,
+.cert__btn:focus-visible .cert__thumb img {
+  transform: scale(1.04);
+}
+
+.cert__btn:hover .cert__thumb::after,
+.cert__btn:focus-visible .cert__thumb::after {
+  opacity: 1;
+  transform: none;
+}
+
+.cert__name {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.cert__meta {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* Certificate viewer */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  justify-items: center;
+  padding: var(--pad);
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s, visibility 0s 0.4s;
+}
+
+.lightbox.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+
+.lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 22, 28, 0.92);
+}
+
+.lightbox__top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 26px;
+  font-size: 11px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.lightbox__top button {
+  min-height: 44px;
+  padding-left: 16px;
+}
+
+.lightbox__figure {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-height: 0;
+  max-width: min(760px, 100%);
+  margin: 16px 0 0;
+}
+
+.lightbox__img {
+  min-height: 0;
+  max-width: 100%;
+  max-height: calc(100svh - 170px);
+  background: #fff;
+  object-fit: contain;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.lightbox__caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.lightbox__caption strong {
+  font-weight: 400;
+}
+
+.lightbox__caption span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.lightbox__nav:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lightbox__nav .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.lightbox__nav--prev {
+  left: var(--pad);
+}
+
+.lightbox__nav--next {
+  right: var(--pad);
+}
+
+/* ==========================================================================
    Contact + form + footer
    ========================================================================== */
 .contact {
@@ -1176,7 +1473,7 @@ figure {
   }
 
   .sidebar,
-  .pills,
+  .topnav,
   .cta,
   .hero__label,
   .team__tags,
@@ -1822,6 +2119,52 @@ figure {
 
   .footer__links a {
     padding-block: 6px;
+  }
+
+  /* Certifications */
+  .certs {
+    padding: 40px 0 72px;
+  }
+
+  .cert-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 28px;
+    margin-top: 48px;
+    border-top: 0;
+  }
+
+  .cert-stats > div {
+    padding: 16px 12px 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .cert-stats dd {
+    margin-top: 10px;
+    font-size: 44px;
+  }
+
+  .cert-stats + .cert-group {
+    margin-top: 56px;
+  }
+
+  .cert-group {
+    display: block;
+    padding: 20px 0 44px;
+  }
+
+  .cert-grid {
+    grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
+    gap: 24px 12px;
+  }
+
+  .lightbox__img {
+    max-height: calc(100svh - 230px);
+  }
+
+  .lightbox__nav {
+    top: auto;
+    bottom: var(--pad);
+    margin-top: 0;
   }
 
   /* Contact */
