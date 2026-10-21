@@ -42,6 +42,38 @@ function scrollToTarget(target: HTMLElement | 0) {
   else window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY + headerOffset() });
 }
 
+/** Jump without smooth scrolling (used behind the transition curtain and after a language switch). */
+function jumpTo(target: HTMLElement | 0) {
+  if (lenis) lenis.scrollTo(target, { offset: target === 0 ? 0 : headerOffset(), immediate: true, force: true });
+  else window.scrollTo({ top: target === 0 ? 0 : target.getBoundingClientRect().top + window.scrollY + headerOffset() });
+  ScrollTrigger.update();
+}
+
+// Section transition: a curtain wipes up with the destination name, the page jumps, the curtain lifts away.
+let transitioning = false;
+
+async function transitionTo(target: HTMLElement | 0, label: string) {
+  const wipe = $('.page-wipe');
+  if (reduceMotion || !wipe) {
+    setMenu(false);
+    return jumpTo(target);
+  }
+  if (transitioning) return;
+  transitioning = true;
+  const text = $('[data-wipe-label]', wipe)!;
+  text.textContent = label;
+  wipe.classList.add('is-active');
+  await Promise.all([
+    gsap.fromTo(wipe, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.65, ease: 'expo.inOut' }),
+    gsap.fromTo(text, { yPercent: 110 }, { yPercent: 0, duration: 0.8, delay: 0.25, ease: 'expo.out' }),
+  ]);
+  setMenu(false); // the menu closes behind the curtain
+  jumpTo(target);
+  await gsap.to(wipe, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.75, delay: 0.15, ease: 'expo.inOut' });
+  wipe.classList.remove('is-active');
+  transitioning = false;
+}
+
 // ---------------------------------------------------------------------------
 // UI: anchors, mobile menu, contact modal, accordions, forms, cursor
 // ---------------------------------------------------------------------------
@@ -114,14 +146,18 @@ function setupUi() {
     const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
     if (!link || link.hasAttribute('data-about-open')) return;
     event.preventDefault();
-    setMenu(false);
     const href = link.getAttribute('href')!;
-    if (href === '#') return;
-    if (href === '#top') return scrollToTarget(0);
+    if (href === '#') return setMenu(false);
+    // curtain label: the link text without its number / decoration
+    const copy = link.cloneNode(true) as HTMLElement;
+    copy.querySelectorAll('span, i, svg').forEach((n) => n.remove());
+    const label = copy.textContent!.trim().replace(/\.$/, '') || 'BL tech';
+    if (href === '#top') return transitionTo(0, 'BL tech');
     const el = $(href);
     // Some anchors (e.g. the mobile "Business" heading) are hidden on desktop: use the next section.
     const target = el && el.getClientRects().length ? el : (el?.nextElementSibling as HTMLElement | null);
-    if (target) scrollToTarget(target);
+    if (target) transitionTo(target, label);
+    else setMenu(false);
   });
 
   menuButton?.addEventListener('click', () => setMenu(!root.classList.contains('menu-open')));
